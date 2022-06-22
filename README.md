@@ -92,8 +92,7 @@ Put the tracking datasets in ./data. It should look like:
 
 
 ## Training
-
-Download pre-trained [MAE](https://github.com/facebookresearch/mae) ViT-Base weights from [Google Drive](https://drive.google.com/drive/folders/1PS4inLS8bWNCecpYZ0W2fE5-A04DvTcd?usp=sharing) and put it under `$PROJECT_ROOT$/pretrained_models`
+Download pre-trained [MAE ViT-Base weights](https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_base.pth) and put it under `$PROJECT_ROOT$/pretrained_models` (different pretrained models can also be used, see [MAE](https://github.com/facebookresearch/mae) for more details).
 
 ```
 python tracking/train.py --script ostrack --config vitb_256_mae_ce_32x4_ep300 --save_dir ./output --mode multiple --nproc_per_node 4 --use_wandb 1
@@ -105,7 +104,7 @@ Replace `--config` with the desired model config under `experiments/ostrack`. We
 ## Evaluation
 Download the model weights from [Google Drive](https://drive.google.com/drive/folders/1PS4inLS8bWNCecpYZ0W2fE5-A04DvTcd?usp=sharing) 
 
-Put the downloaded weights on `$PROJECT_ROOT$/pretrained_models`
+Put the downloaded weights on `$PROJECT_ROOT$/output/checkpoints/train/ostrack`
 
 Change the corresponding values of `lib/test/evaluation/local.py` to the actual benchmark saving paths
 
