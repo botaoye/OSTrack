@@ -57,7 +57,7 @@ We provide the full docker file here.
 ## Set project paths
 Run the following command to set paths for this project
 ```
-python tracking/create_default_local_file.py --workspace_dir . --data_dir ./data --save_dir .
+python tracking/create_default_local_file.py --workspace_dir . --data_dir ./data --save_dir ./output
 ```
 After running this command, you can also modify paths by editing these two files
 ```
@@ -141,7 +141,7 @@ python tracking/test.py ostrack ostrack384_elimination_ep300 --dataset vot22 --t
 
 
 ## Test FLOPs, and Speed
-*Note:* The speeds reported in our paper were tested on a single RTX2080Ti GPU with Pytorch 1.9.0. Different hardware may influence the tracking performance.
+*Note:* The speeds reported in our paper were tested on a single RTX2080Ti GPU.
 
 ```
 # Profiling vitb_256_mae_ce_32x4_ep300
