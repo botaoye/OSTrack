@@ -1,15 +1,13 @@
 import torch
 import math
 import cv2 as cv
-import torch.nn.functional as F
-import numpy as np
 
 '''modified from the original test implementation
 Replace cv.BORDER_REPLICATE with cv.BORDER_CONSTANT
 Add a variable called att_mask for computing attention and positional encoding later'''
 
 
-def sample_target(im, target_bb, search_area_factor, output_sz=None, mask=None):
+def sample_target(im, target_bb, search_area_factor, output_sz=None):
     """ Extracts a square crop centered at target_bb box, of area search_area_factor^2 times target_bb area
 
     args:
@@ -46,37 +44,13 @@ def sample_target(im, target_bb, search_area_factor, output_sz=None, mask=None):
 
     # Crop target
     im_crop = im[y1 + y1_pad:y2 - y2_pad, x1 + x1_pad:x2 - x2_pad, :]
-    if mask is not None:
-        mask_crop = mask[y1 + y1_pad:y2 - y2_pad, x1 + x1_pad:x2 - x2_pad]
 
     # Pad
     im_crop_padded = cv.copyMakeBorder(im_crop, y1_pad, y2_pad, x1_pad, x2_pad, cv.BORDER_CONSTANT)
-    # deal with attention mask
-    H, W, _ = im_crop_padded.shape
-    att_mask = np.ones((H,W))
-    end_x, end_y = -x2_pad, -y2_pad
-    if y2_pad == 0:
-        end_y = None
-    if x2_pad == 0:
-        end_x = None
-    att_mask[y1_pad:end_y, x1_pad:end_x] = 0
-    if mask is not None:
-        mask_crop_padded = F.pad(mask_crop, pad=(x1_pad, x2_pad, y1_pad, y2_pad), mode='constant', value=0)
 
-    if output_sz is not None:
-        resize_factor = output_sz / crop_sz
-        im_crop_padded = cv.resize(im_crop_padded, (output_sz, output_sz))
-        att_mask = cv.resize(att_mask, (output_sz, output_sz)).astype(np.bool_)
-        if mask is None:
-            return im_crop_padded, resize_factor, att_mask
-        mask_crop_padded = \
-        F.interpolate(mask_crop_padded[None, None], (output_sz, output_sz), mode='bilinear', align_corners=False)[0, 0]
-        return im_crop_padded, resize_factor, att_mask, mask_crop_padded
-
-    else:
-        if mask is None:
-            return im_crop_padded, att_mask.astype(np.bool_), 1.0
-        return im_crop_padded, 1.0, att_mask.astype(np.bool_), mask_crop_padded
+    resize_factor = output_sz / crop_sz
+    im_crop_padded = cv.resize(im_crop_padded, (output_sz, output_sz))
+    return im_crop_padded, resize_factor
 
 
 def transform_image_to_crop(box_in: torch.Tensor, box_extract: torch.Tensor, resize_factor: float,
