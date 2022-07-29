@@ -26,7 +26,7 @@ Without any additional temporal information, OSTrack achieves SOTA performance o
 
 
 ### :star2: Fast Training
-OSTrack-256 can be trained in ~23 hours with 4*2080Ti (11GB of memory per GPU), which is much faster than recent SOTA transformer-based trackers. The fast training speed comes from:
+OSTrack-256 can be trained in ~24 hours with 4*V100 (16GB of memory per GPU), which is much faster than recent SOTA transformer-based trackers. The fast training speed comes from:
 
 1. While previous Siamese-stype trackers required separate feeding of the template and search region into the backbone at each iteration of training, OSTrack directly combines the template and search region. The tight and highly parallelized structure results in improved training and inference speed.
   
@@ -42,14 +42,19 @@ OSTrack-256 can be trained in ~23 hours with 4*2080Ti (11GB of memory per GPU), 
 </p>
 
 ## Install the environment
-**Option1**: Use the Anaconda
+**Option1**: Use the Anaconda (CUDA 10.2)
 ```
 conda create -n ostrack python=3.8
 conda activate ostrack
 bash install.sh
 ```
 
-**Option2**: Use the docker file
+**Option2**: Use the Anaconda (CUDA 11.3)
+```
+conda env create -f ostrack_cuda113_env.yaml
+```
+
+**Option3**: Use the docker file
 
 We provide the full docker file here.
 
@@ -116,13 +121,13 @@ python tracking/analysis_results.py # need to modify tracker configs and names
 ```
 - GOT10K-test
 ```
-python tracking/test.py ostrack vitb_384_mae_ce_32x4_ep300 --dataset got10k_test --threads 16 --num_gpus 4
-python lib/test/utils/transform_got10k.py --tracker_name ostrack --cfg_name ostrack384_got10k_elimination_ep100
+python tracking/test.py ostrack vitb_384_mae_ce_32x4_got10k_ep100 --dataset got10k_test --threads 16 --num_gpus 4
+python lib/test/utils/transform_got10k.py --tracker_name ostrack --cfg_name vitb_384_mae_ce_32x4_got10k_ep100
 ```
 - TrackingNet
 ```
 python tracking/test.py ostrack vitb_384_mae_ce_32x4_ep300 --dataset trackingnet --threads 16 --num_gpus 4
-python lib/test/utils/transform_trackingnet.py --tracker_name ostrack --cfg_name ostrack384_elimination_ep300
+python lib/test/utils/transform_trackingnet.py --tracker_name ostrack --cfg_name vitb_384_mae_ce_32x4_ep300
 ```
 
 ## Visualization or Debug 
@@ -162,7 +167,7 @@ If our work is useful for your research, please consider cite:
 ```
 @article{ye2022ostrack,
   title={Joint Feature Learning and Relation Modeling for Tracking: A One-Stream Framework},
-  author={Ye, Botao and Chang, Hong and Ma, Bingpeng and Shan, Shiguang},
+  author={Ye, Botao and Chang, Hong and Ma, Bingpeng and Shan, Shiguang and Chen, Xilin},
   journal={arXiv preprint arXiv:2203.11991},
   year={2022}
 }
