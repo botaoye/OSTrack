@@ -46,14 +46,7 @@ class Attention(nn.Module):
         if mask is not None:
             attn = attn.masked_fill(mask.unsqueeze(1).unsqueeze(2), float('-inf'),)
 
-        split_attn = False
-        len_t = 49
-        if split_attn:
-            attn_t = attn[..., :len_t].softmax(dim=-1)
-            attn_s = attn[..., len_t:].softmax(dim=-1)
-            attn = torch.cat([attn_t, attn_s], dim=-1)
-        else:
-            attn = attn.softmax(dim=-1)
+        attn = attn.softmax(dim=-1)
         attn = self.attn_drop(attn)
 
         x = (attn @ v).transpose(1, 2).reshape(B, N, C)
