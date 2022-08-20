@@ -98,6 +98,9 @@ class LTRTrainer(BaseTrainer):
                     self.optimizer.step()
                 else:
                     self.scaler.scale(loss).backward()
+                    if self.settings.grad_clip_norm > 0:
+                        self.scaler.unscale_(self.optimizer)
+                        torch.nn.utils.clip_grad_norm_(self.actor.net.parameters(), self.settings.grad_clip_norm)
                     self.scaler.step(self.optimizer)
                     self.scaler.update()
 
