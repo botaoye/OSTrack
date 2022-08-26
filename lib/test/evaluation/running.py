@@ -1,3 +1,6 @@
+import time
+from datetime import timedelta
+
 import numpy as np
 import multiprocessing
 import os
@@ -164,6 +167,7 @@ def run_dataset(dataset, trackers, debug=False, threads=0, num_gpus=8):
     multiprocessing.set_start_method('spawn', force=True)
 
     print('Evaluating {:4d} trackers on {:5d} sequences'.format(len(trackers), len(dataset)))
+    dataset_start_time = time.time()
 
     multiprocessing.set_start_method('spawn', force=True)
 
@@ -180,4 +184,4 @@ def run_dataset(dataset, trackers, debug=False, threads=0, num_gpus=8):
         param_list = [(seq, tracker_info, debug, num_gpus) for seq, tracker_info in product(dataset, trackers)]
         with multiprocessing.Pool(processes=threads) as pool:
             pool.starmap(run_sequence, param_list)
-    print('Done')
+    print('Done, total time: {}'.format(str(timedelta(seconds=(time.time() - dataset_start_time)))))

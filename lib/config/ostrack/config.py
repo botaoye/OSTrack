@@ -12,7 +12,7 @@ cfg.MODEL.PRETRAIN_FILE = "mae_pretrain_vit_base.pth"
 cfg.MODEL.EXTRA_MERGER = False
 
 cfg.MODEL.RETURN_INTER = False
-cfg.MODEL.RETURN_STAGES = [2, 5, 8, 11]
+cfg.MODEL.RETURN_STAGES = []
 
 # MODEL.BACKBONE
 cfg.MODEL.BACKBONE = edict()

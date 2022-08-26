@@ -42,6 +42,7 @@ class BaseBackbone(nn.Module):
 
         self.cat_mode = cfg.MODEL.BACKBONE.CAT_MODE
         self.return_inter = cfg.MODEL.RETURN_INTER
+        self.return_stage = cfg.MODEL.RETURN_STAGES
         self.add_sep_seg = cfg.MODEL.BACKBONE.SEP_SEG
 
         # resize patch embedding
@@ -99,7 +100,7 @@ class BaseBackbone(nn.Module):
         # self.pos_embed = None
 
         if self.return_inter:
-            for i_layer in self.fpn_stage:
+            for i_layer in self.return_stage:
                 if i_layer != 11:
                     norm_layer = partial(nn.LayerNorm, eps=1e-6)
                     layer = norm_layer(self.embed_dim)
