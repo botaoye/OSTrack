@@ -14,6 +14,9 @@ The official implementation for the **ECCV 2022** paper [_Joint Feature Learning
   <img width="85%" src="https://github.com/botaoye/OSTrack/blob/main/assets/arch.png" alt="Framework"/>
 </p>
 
+## News
+
+- :trophy: We are the winners of VOT-2022 STb(box GT) & RTb challenges.
 
 ## :sunny: Highlights
 
