@@ -16,9 +16,11 @@ The official implementation for the **ECCV 2022** paper [_Joint Feature Learning
 
 ## News
 
+**[Oct 28, 2022]**
 - :trophy: We are the winners of VOT-2022 STb(box GT) & RTb challenges.
 
-## :sunny: Highlights
+
+## Highlights
 
 ### :star2: New One-stream Tracking Framework
 OSTrack is a simple, neat, high-performance **one-stream tracking framework** for joint feature learning and relational modeling based on self-attention operators.
