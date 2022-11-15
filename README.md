@@ -169,13 +169,13 @@ python tracking/profile_model.py --script ostrack --config vitb_384_mae_ce_32x4_
 
 
 ## Citation
-If our work is useful for your research, please consider cite:
+If our work is useful for your research, please consider citing:
 
-```
-@article{ye2022ostrack,
+```Bibtex
+@inproceedings{ye2022ostrack,
   title={Joint Feature Learning and Relation Modeling for Tracking: A One-Stream Framework},
   author={Ye, Botao and Chang, Hong and Ma, Bingpeng and Shan, Shiguang and Chen, Xilin},
-  journal={arXiv preprint arXiv:2203.11991},
+  booktitle={ECCV},
   year={2022}
 }
 ```
