@@ -15,8 +15,10 @@ The official implementation for the **ECCV 2022** paper [_Joint Feature Learning
 </p>
 
 ## News
+**[Dec. 12, 2022]**
+- OSTrack is now avaliable in [Modelscope](https://modelscope.cn/models/damo/cv_vitb_video-single-object-tracking_ostrack/summary), where you can run demo videos online and conveniently integrate OSTrack into your code.
 
-**[Oct 28, 2022]**
+**[Oct. 28, 2022]**
 - :trophy: We are the winners of VOT-2022 STb(box GT) & RTb challenges.
 
 
