@@ -16,7 +16,7 @@ The official implementation for the **ECCV 2022** paper [_Joint Feature Learning
 
 ## News
 **[Dec. 12, 2022]**
-- OSTrack is now avaliable in [Modelscope](https://modelscope.cn/models/damo/cv_vitb_video-single-object-tracking_ostrack/summary), where you can run demo videos online and conveniently integrate OSTrack into your code.
+- OSTrack is now available in [Modelscope](https://modelscope.cn/models/damo/cv_vitb_video-single-object-tracking_ostrack/summary), where you can run demo videos online and conveniently integrate OSTrack into your code.
 
 **[Oct. 28, 2022]**
 - :trophy: We are the winners of VOT-2022 STb(box GT) & RTb challenges.
@@ -37,11 +37,11 @@ Without any additional temporal information, OSTrack achieves SOTA performance o
 ### :star2: Fast Training
 OSTrack-256 can be trained in ~24 hours with 4*V100 (16GB of memory per GPU), which is much faster than recent SOTA transformer-based trackers. The fast training speed comes from:
 
-1. While previous Siamese-stype trackers required separate feeding of the template and search region into the backbone at each iteration of training, OSTrack directly combines the template and search region. The tight and highly parallelized structure results in improved training and inference speed.
+1. While previous Siamese-style trackers required separate feeding of the template and search region into the backbone at each iteration of training, OSTrack directly combines the template and search region. The tight and highly parallelized structure results in improved training and inference speed.
   
-2. The proposed early candidate elimination (ECE) module significantly reduce memory and time consumption.
+2. The proposed early candidate elimination (ECE) module significantly reduces memory and time consumption.
   
-3. Pretrained Transformer weights enables faster convergence.
+3. Pretrained Transformer weights enable faster convergence.
 
 ### :star2: Good performance-speed trade-off
 
@@ -80,7 +80,7 @@ lib/test/evaluation/local.py  # paths about testing
 ```
 
 ## Data Preparation
-Put the tracking datasets in ./data. It should look like:
+Put the tracking datasets in ./data. It should look like this:
    ```
    ${PROJECT_ROOT}
     -- data
@@ -141,13 +141,13 @@ python lib/test/utils/transform_trackingnet.py --tracker_name ostrack --cfg_name
 
 ## Visualization or Debug 
 [Visdom](https://github.com/fossasia/visdom) is used for visualization. 
-1. Alive visdom in the sever by running `visdom`:
+1. Alive visdom in the server by running `visdom`:
 
 2. Simply set `--debug 1` during inference for visualization, e.g.:
 ```
-python tracking/test.py ostrack ostrack384_elimination_ep300 --dataset vot22 --threads 1 --num_gpus 1 --debug 1
+python tracking/test.py ostrack vitb_384_mae_ce_32x4_ep300 --dataset vot22 --threads 1 --num_gpus 1 --debug 1
 ```
-3. Open `http://localhost:8097` in your browser (remember to change the ip address and port according to the actual situation).
+3. Open `http://localhost:8097` in your browser (remember to change the IP address and port according to the actual situation).
 
 4. Then you can visualize the candidate elimination process.
 
