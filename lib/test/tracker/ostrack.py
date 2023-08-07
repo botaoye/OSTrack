@@ -1,5 +1,3 @@
-import math
-
 from lib.models.ostrack import build_ostrack
 from lib.test.tracker.basetracker import BaseTracker
 import torch
@@ -26,6 +24,7 @@ class OSTrack(BaseTracker):
         self.network.eval()
         self.preprocessor = Preprocessor()
         self.state = None
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.feat_sz = self.cfg.TEST.SEARCH_SIZE // self.cfg.MODEL.BACKBONE.STRIDE
         # motion constrain
@@ -45,22 +44,19 @@ class OSTrack(BaseTracker):
                 self._init_visdom(None, 1)
         # for save boxes from all queries
         self.save_all_boxes = params.save_all_boxes
-        self.z_dict1 = {}
 
     def initialize(self, image, info: dict):
         # forward the template once
-        z_patch_arr, resize_factor, z_amask_arr = sample_target(image, info['init_bbox'], self.params.template_factor,
+        z_patch_arr, resize_factor = sample_target(image, info['init_bbox'], self.params.template_factor,
                                                     output_sz=self.params.template_size)
-        self.z_patch_arr = z_patch_arr
-        template = self.preprocessor.process(z_patch_arr, z_amask_arr)
         with torch.no_grad():
-            self.z_dict1 = template
+            self.z_tensor = self.preprocessor.process(z_patch_arr)
 
         self.box_mask_z = None
         if self.cfg.MODEL.BACKBONE.CE_LOC:
             template_bbox = self.transform_bbox_to_crop(info['init_bbox'], resize_factor,
-                                                        template.tensors.device).squeeze(1)
-            self.box_mask_z = generate_mask_cond(self.cfg, 1, template.tensors.device, template_bbox)
+                                                        self.device).squeeze(1)
+            self.box_mask_z = generate_mask_cond(self.cfg, 1, self.device, template_bbox)
 
         # save states
         self.state = info['init_bbox']
@@ -73,16 +69,16 @@ class OSTrack(BaseTracker):
     def track(self, image, info: dict = None):
         H, W, _ = image.shape
         self.frame_id += 1
-        x_patch_arr, resize_factor, x_amask_arr = sample_target(image, self.state, self.params.search_factor,
+        x_patch_arr, resize_factor = sample_target(image, self.state, self.params.search_factor,
                                                                 output_sz=self.params.search_size)  # (x1, y1, w, h)
-        search = self.preprocessor.process(x_patch_arr, x_amask_arr)
 
         with torch.no_grad():
-            x_dict = search
+            x_tensor = self.preprocessor.process(x_patch_arr)
+
             # merge the template and the search
             # run the transformer
             out_dict = self.network.forward(
-                template=self.z_dict1.tensors, search=x_dict.tensors, ce_template_mask=self.box_mask_z)
+                template=self.z_tensor, search=x_tensor, ce_template_mask=self.box_mask_z)
 
         # add hann windows
         pred_score_map = out_dict['score_map']
